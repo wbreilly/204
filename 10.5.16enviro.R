@@ -1,10 +1,3 @@
-# > load("/Users/WBR/walter/204_stats/9.30.16enviro.RData")
-# > View(HW01Data)
-# > View(HW01Data)
-# > tapply(HW01Data$age_yr, HW01Data$ed_cmplt, HW01Data$biosex, mean)
-# Error in match.fun(FUN) : 
-#   'HW01Data$biosex' is not a function, character or symbol
-# > 
 #   > tapply(HW01Data$age_yr, HW01Data$ed_cmplt, mean)
 # College2YR College4YR         HS         MA        PhD 
 # 20.01176   23.14118   24.80256   25.10182   29.83784 
@@ -58,14 +51,30 @@
 
 
 # add a column
-HW01Data[ , "BMI"] <- HW01Data
+HW01Data[, "BMI"] <- HW01Data
 
-calc.bmi = function(weight,height)
+calc.bmi = function(weight_lbs, height_ins)
 {
-  bmi = weight / height^2 * 703
+  bmi = weight_lbs / height_ins^2 * 703
   return(bmi)
 }
 
 
 #HW01Data$BMI = sapply(HW01Data, calc.bmi(weight_lbs,height_in))
-HW01Data[,"BMI"]  = sapply(HW01Data, calc.bmi, weight_lbs, height_in, simplify = F)
+# HW01Data[,"BMI"]  = apply(HW01Data, 1, mean)
+
+library(tidyverse)
+
+# 7a
+HW01Data = HW01Data %>%
+  mutate(BMI = weight_lbs / height_in^2 * 703)
+   
+HW01Data %>%
+  group_by(biosex, ed_cmplt) %>%
+  mutate(mean_age = mean(age_yr))
+
+#7b
+HW01Data %>%
+  group_by(biosex) %>%
+    summarise(sex.bmi = mean(BMI)
+  
