@@ -76,5 +76,66 @@ HW01Data %>%
 #7b
 HW01Data %>%
   group_by(biosex) %>%
-    summarise(sex.bmi = mean(BMI)
+    summarise(sex.bmi = mean(BMI))
   
+#7c
+# if bmi is in a certain range, apply the appropriate label labels
+
+bmi.class = function(BMI)
+{
+  if (BMI < 18.5)
+  return("underweight")
+  else if (BMI >= 18.5 & BMI <= 24.9)
+  return("normal")
+  else if (BMI >= 25 )
+  return("overweight")
+}
+HW01Data = HW01Data %>%
+   mutate(cats = bmi.class(BMI))
+
+#apply function to every BMI value
+HW01Data$cats =  tapply(HW01Data, bmi.class(HW01Data$BMI))
+
+
+# maybe it's the function
+
+
+
+bmi.class = function(idx)
+{
+  if (idx < 18.5)
+  {cat = "underweight"}
+  else if (idx >= 18.5 & idx <= 24.9)
+  {cat = "normal"}
+  else if (idx >= 25 )
+  {cat = "overweight"}
+  return(cat)
+}
+nrows = nrow(bims)
+#allocate matrix
+cats = matrix(data=NA,nrow=nrows,ncol=1)
+
+for(i in 1:nrows) 
+  {
+  cats[i,1] = bmi.class(bims[i,1]) 
+  }
+
+# more clumsy way
+bmis = HW01Data[,"BMI"]
+
+# finally
+
+HW01Data <- mutate(HW01Data, 
+                   underweight = BMI < 18.5,
+                   normal = BMI >= 18.5 & BMI <= 24.9, 
+                   overweight = BMI >= 25)
+
+#this didnt work
+# HW01Data %>%
+#   group_by(biosex,underweight,normal,overweight) %>%
+#   summary()
+    
+
+summary(HW01Data[HW01Data$underweight,"biosex"]) 
+summary(HW01Data[HW01Data$normal,"biosex"]) 
+summary(HW01Data[HW01Data$overweight,"biosex"]) 
