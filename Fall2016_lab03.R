@@ -147,6 +147,7 @@ pt(1.9, 99, lower.tail = FALSE)
 pt(-1.9, 99, lower.tail = TRUE)
 
 #t value associated with a proportion in the t the distribution
+# p = .05
 qt(.025, 4, lower.tail = TRUE)
 qt(.025, 4, lower.tail = FALSE)
 
