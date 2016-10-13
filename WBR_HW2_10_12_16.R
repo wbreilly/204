@@ -74,7 +74,8 @@ HWD[,7] = drop(HWD$z.BMI)
 # new rescaled column
 HWD = mutate(HWD, rescale.BMI = (HWD$z.BMI*15)+100)
 
-
+HWD[HWD$rescale.BMI == max(HWD$rescale.BMI), ]
+HWD[HWD$rescale.BMI == min(HWD$rescale.BMI), ]
 
 
 
