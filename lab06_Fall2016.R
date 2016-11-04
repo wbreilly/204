@@ -24,6 +24,8 @@ by(d$score,d$condition,mean)
 
 #Post-hoc comparions
 
+# dif post hoc tests vary in how conservative they are in terms of ...
+# type I error. Bonferroni is one of the most conservative 
 
 ########################################################
 
@@ -167,6 +169,7 @@ anova(lm(d$a1c ~ d$female + d$dose))
 #Factorial ANOVA, Interaction
 
 anova(lm(d$a1c ~ d$female + d$dose + d$female*d$dose))
+
 
 anova(lm(d$a1c ~ d$female*d$dose))
 
