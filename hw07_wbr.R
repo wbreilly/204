@@ -5,7 +5,7 @@
 
 library(tidyverse)
 
-d <- read.csv("~/walter/204/confidence.csv")
+d <- read.csv("~/walter/204_stats/confidence.csv")
 
 # 1 format long
 
@@ -30,6 +30,45 @@ dlong = mutate(dlong,time)
 
 # 2 test whether public and private universities differ in confidence
 summary(aov(confidence ~ public + Error(id), data = dlong))
+mod1 = aov(confidence ~ public + Error(id), data = dlong)
+
+
+TukeyHSD(mod1)
+# pairwise t-test public or private 
+pairwise.t.test(dlong$confidence, dlong$public,
+                p.adjust.method = c("bonferroni"))
+
+
+#### 3 test whether confidence differs over time 
+summary(aov(confidence ~ obs + Error(id), data = dlong))
+
+# needed this for contra.poly to work
+options(contrasts=c("contr.sum","contr.poly"))
+
+#Polynomial Contrasts to describe trajectories
+dlong[,6] <- contr.poly(3)[,1] 
+dlong[,7] <- contr.poly(3)[,2] 
+
+# add contrasts to df
+colnames(dlong) <- c(colnames(dlong[,1:5]),c("l","q"))
+head(dlong)
+tail(dlong)
+
+# evaluate anova
+summary(aov(confidence ~ l + q + Error(id), data = dlong))
+
+summary(aov(confidence ~ l*public + q*public + 
+              Error(id), data = dlong))
+
+
+
+
+
+
+
+
+
+
 
 
 

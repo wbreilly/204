@@ -141,7 +141,7 @@ summary(aov(glucose ~ drug*obs + Error(id), data = glong))
 
 
 #Polynomial Contrasts to describe trajectories
-contr.poly(4)
+contra.poly(4)
 
 glong[,6] <- contr.poly(4)[,1] 
 glong[,7] <- contr.poly(4)[,2] 
