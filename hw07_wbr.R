@@ -6,7 +6,7 @@
 library(dplyr)
 library(tidyr)
 
-d <- read.csv("~/walter/204/confidence.csv")
+d <- read.csv("~/walter/204_stats/confidence.csv")
 
 # 1 format long
 
@@ -24,18 +24,13 @@ dlong<-reshape(d,                   #1. input wide data
 head(dlong)
 tail(dlong)
 
-# make time non-categorical variable
-dlong<-dlong[order(dlong$id),]
-time <- rep(c(0.5,1.5,2.5), 100)
-dlong = mutate(dlong,time)
 
 # 2 test whether public and private universities differ in confidence
 summary(aov(confidence ~ public + Error(id), data = dlong))
-mod1 = aov(confidence ~ public + Error(id), data = dlong)
+
 
 # group means
 summarise(group_by(dlong, public), mean = mean(confidence))
-
 
 # 3 test whether confidence differs over time 
 summary(aov(confidence ~ obs + Error(id), data = dlong))
@@ -44,11 +39,11 @@ summary(aov(confidence ~ obs + Error(id), data = dlong))
 #options(contrasts=c("contr.sum","contr.poly"))
 
 #Polynomial Contrasts to describe trajectories
-dlong[,6] <- contr.poly(3)[,1] 
-dlong[,7] <- contr.poly(3)[,2] 
+dlong[,5] <- contr.poly(3)[,1] 
+dlong[,6] <- contr.poly(3)[,2] 
 
 # add contrasts to df
-colnames(dlong) <- c(colnames(dlong[,1:5]),c("l","q"))
+colnames(dlong) <- c(colnames(dlong[,1:4]),c("l","q"))
 
 # evaluate anova
 summary(aov(confidence ~ l*obs + q*obs + 
