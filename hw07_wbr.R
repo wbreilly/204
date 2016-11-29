@@ -6,7 +6,7 @@
 library(dplyr)
 library(tidyr)
 
-d <- read.csv("~/walter/204_stats/confidence.csv")
+d <- read.csv("~/walter/204/confidence.csv")
 
 # 1 format long
 
@@ -50,14 +50,30 @@ summary(aov(confidence ~ l*obs + q*obs +
               Error(id), data = dlong))
 
 
-summary(aov(confidence ~ l*obs + q*obs + Error(id), data = dlong))
+# 4 tests of interaction 
+summary(aov(confidence ~ public*obs + Error(id), data = dlong))
+
+#Simple Effects split on interaction: e.g., drug vs. placebo
+summary(aov(confidence ~ obs + Error(id), dlong[which(dlong$public == 0),]))
+summary(aov(confidence ~ obs + Error(id), dlong[which(dlong$public == 1),]))
 
 
+# private
+pairwise.t.test(dlong[which(dlong$public == 0),"confidence"],
+                dlong[which(dlong$public == 0),"obs"],
+                paired = TRUE, p.adjust = c("bonf"))
+# public
+pairwise.t.test(dlong[which(dlong$public == 1),"confidence"],
+                dlong[which(dlong$public == 1),"obs"],
+                paired = TRUE, p.adjust = c("bonf"))
 
+# polynomial only private
+summary(aov(confidence ~ l + q +
+              Error(id), dlong[which(dlong$public == 0),]))
 
-
-
-
+# polynomial only publie
+summary(aov(confidence ~ l + q + 
+              Error(id), dlong[which(dlong$public == 1),]))
 
 
 
