@@ -61,7 +61,7 @@ sdm
 sdm %*% corm %*% sdm
 covm
 
-#Matrix algebra for conversion to covariance from correlation
+#Matrix algebra for conversion to correlation from covariance
 sdm2 <- matrix(c(
      1/2,   0,
      0  , 1/3), nrow = 2, ncol = 2, byrow = TRUE)
