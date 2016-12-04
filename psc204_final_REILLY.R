@@ -45,18 +45,41 @@ d = mutate(d,obs = 1:70)
 # make subject a grouping variable
 d = gather(d, subject,mood,c(2:5))
 
-# plot
+#1a plot
 p1 =  ggplot(data=d, aes(x=temp, y=mood, group=subject, colour = subject)) +
   stat_smooth() +
   geom_point() +
   ggtitle("The Mood of 4 Individuals, Modulated by Temperature (Loess)")
+p1
+
+#1b  compute means and sds
+summarise(group_by(d, subject), mean = mean(mood), sd = sd(mood))
+
+# plot 2
+p2 =  ggplot(data=d, aes(x=temp, y=mood, group=1)) +
+  stat_smooth(method = glm) +
+  geom_point() +
+  ggtitle("Mood, Modulated by Temperature (GLM)")
 p2
 
 
-#  compute means
+##################################################
+#1c
+# read in data again to original format
+d2 <- read.csv("~/walter/204_stats/tempmood.csv")
 
+# add mean mood across ps
+d2 = mutate(d2,moodmn = (part1 + part2 + part3 + part4)/4)
 
+# calculate covariance
+ cov(d2$temp,d2$moodmn)
+ 
+ # junk
+ crossprod(d2$temp,d2$moodmn)
+ prod = d2$temp %*% d2$moodmn
+ 
+ mat = as.matrix(cbind(d2$temp,d2$moodmn))
 
+ dotprod = t(mat) %*% mat
 
-
-
+ 
