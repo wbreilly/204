@@ -146,4 +146,37 @@ corz.p4
  zp3p4 <- (corz.p3- corz.p4) / sqrt((1/67) + (1/67))
  zp3p4
  
+ ##############################################################
+ #3 
+ library(tidyverse)
+ d <- read.csv("~/walter/204_stats/socialacceptance.csv")
+ View(d)
  
+# take a look at summary statistics
+ sumstats = d %>% group_by(sports, female) %>% summarise(mean = mean(psa), SD = sd(psa))
+
+ # get n
+counts = count(group_by(d,sports, female))
+ 
+# add n to sumstats
+sumstats[,5] = counts[,3]
+
+ # add SE
+ sumstats = mutate(sumstats , SE = SD/sqrt(n))
+ 
+ 
+# create a bar graph
+ limits <- aes(ymax = sumstats$mean + sumstats$SE,
+               ymin = sumstats$mean - sumstats$SE)
+ 
+ p3 <- ggplot(data = sumstats, aes(x = factor(female), y = mean,
+                                 fill = factor(sports)))
+ p3 = p3 + geom_bar(stat = "identity",
+              position = position_dodge(0.9)) +
+   geom_errorbar(limits, position = position_dodge(0.9),
+                 width = 0.15) +
+   labs(x = "Biological Sex", y = "PSA") +
+   ggtitle("Influence of Sports Participantion on PSA") +
+   scale_fill_discrete(name = "Sports")
+p3
+
