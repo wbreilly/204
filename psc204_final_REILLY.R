@@ -71,15 +71,34 @@ d2 <- read.csv("~/walter/204_stats/tempmood.csv")
 # add mean mood across ps
 d2 = mutate(d2,moodmn = (part1 + part2 + part3 + part4)/4)
 
-# calculate covariance
+# mean temp
+mntemp = mean(d2$temp)
+# mnmnmood
+mnmoodmn = mean(d2$moodmn)
+
+# subtract mean from everyvalue
+d2 = mutate(d2,temp2 = temp-mntemp)
+d2 = mutate(d2,mood2 = moodmn-mnmoodmn)
+
+# create matrix from the above 
+mat = as.matrix(cbind(d2$temp2,d2$mood2))
+
+# off diagonal is the sum of cross products
+crossp = t(mat) %*% mat
+crossp
+# covariance is simply the mean of the cross products
+cov1 = crossp/69 # divide by n-1
+cov1
+# calculate covariance the easy way for comparison
  cov(d2$temp,d2$moodmn)
  
- # junk
- crossprod(d2$temp,d2$moodmn)
- prod = d2$temp %*% d2$moodmn
  
- mat = as.matrix(cbind(d2$temp,d2$moodmn))
-
- dotprod = t(mat) %*% mat
-
  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
