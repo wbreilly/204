@@ -19,7 +19,7 @@
  
  # imported csv of the full covariance matrix, which was copied from the Word doc.
  # I used Excel to copy the matrix across the diagonal
-corrmx = tocorr.mtx %*% covmtx %*% tocorr.mtx\
+corrmx = tocorr.mtx %*% covmtx %*% tocorr.mtx
 corrmx
  
 # double check covariance matrix by reproducing from corr matrix
@@ -32,5 +32,31 @@ sd.mtx[5,5] = sqrt(29.16)
 
 covarmx = sd.mtx %*% corrmx %*% sd.mtx
 covarmx
+
+################################################################
+#1
+library("ggplot2")
+library(tidyverse)
+d <- read.csv("~/walter/204_stats/tempmood.csv")
+
+# add obs var
+d = mutate(d,obs = 1:70)
+
+# make subject a grouping variable
+d = gather(d, subject,mood,c(2:5))
+
+# plot
+p1 =  ggplot(data=d, aes(x=temp, y=mood, group=subject, colour = subject)) +
+  stat_smooth() +
+  geom_point() +
+  ggtitle("The Mood of 4 Individuals, Modulated by Temperature (Loess)")
+p2
+
+
+#  compute means
+
+
+
+
 
 
