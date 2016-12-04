@@ -92,13 +92,58 @@ cov1
 # calculate covariance the easy way for comparison
  cov(d2$temp,d2$moodmn)
  
+ ##################################################
  
+ #1c
  
+ # correlation between weather and mood, easy way
+ cor(d2$temp,d2$moodmn)
+ # other way
+ cov1[2,1]/(sd(d2$temp2)*sd(d2$mood2))
  
+ ##########################
  
+ #1d estimate regression equation of the line for all individuals as single group
+ lm(d2$moodmn ~ d2$temp)
  
+ #1e estimate regression line for each individual 
+ lm(d2$part1 ~ d2$temp)
+ lm(d2$part2 ~ d2$temp)
+ lm(d2$part3 ~ d2$temp)
+ lm(d2$part4 ~ d2$temp)
  
+ #1f Fisher's z transform
  
- 
+ cor.p1 <- cor(d[which(d$subject == "part1"), "mood"],
+               d[which(d$subject == "part1"), "temp"])
+ cor.p2 <- cor(d[which(d$subject == "part2"), "mood"],
+               d[which(d$subject == "part2"), "temp"])
+ cor.p3 <- cor(d[which(d$subject == "part3"), "mood"],
+               d[which(d$subject == "part3"), "temp"])
+ cor.p4 <- cor(d[which(d$subject == "part4"), "mood"],
+               d[which(d$subject == "part4"), "temp"])
  
 
+corz.p1 <- .5 * log((1 + cor.p1) / (1 - cor.p1))
+corz.p1
+corz.p2 <- .5 * log((1 + cor.p2) / (1 - cor.p2))
+corz.p2
+corz.p3 <- .5 * log((1 + cor.p3) / (1 - cor.p3))
+corz.p3
+corz.p4 <- .5 * log((1 + cor.p4) / (1 - cor.p4))
+corz.p4
+ 
+ zp1p2 <- (corz.p1- corz.p2) / sqrt((1/67) + (1/67))
+ zp1p2
+ zp1p3 <- (corz.p1- corz.p3) / sqrt((1/67) + (1/67))
+ zp1p3
+ zp1p4 <- (corz.p1- corz.p4) / sqrt((1/67) + (1/67))
+ zp1p4
+ zp2p3 <- (corz.p2- corz.p3) / sqrt((1/67) + (1/67))
+ zp2p3
+ zp2p4 <- (corz.p2- corz.p4) / sqrt((1/67) + (1/67))
+ zp2p4
+ zp3p4 <- (corz.p3- corz.p4) / sqrt((1/67) + (1/67))
+ zp3p4
+ 
+ 
