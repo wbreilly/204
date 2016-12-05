@@ -152,9 +152,13 @@ corz.p4
  d <- read.csv("~/walter/204_stats/socialacceptance.csv")
  View(d)
  
-# take a look at summary statistics
+ # main effect sum stats
+ sportstats = d %>% group_by(sports) %>% summarise(mean = mean(psa), SD = sd(psa))
+ biostats = d %>% group_by(female) %>% summarise(mean = mean(psa), SD = sd(psa))
+  
+# take a look at summary statistics, interaction
  sumstats = d %>% group_by(sports, female) %>% summarise(mean = mean(psa), SD = sd(psa))
-
+ 
  # get n
 counts = count(group_by(d,sports, female))
  
@@ -163,7 +167,6 @@ sumstats[,5] = counts[,3]
 
  # add SE
  sumstats = mutate(sumstats , SE = SD/sqrt(n))
- 
  
 # create a bar graph
  limits <- aes(ymax = sumstats$mean + sumstats$SE,
@@ -180,3 +183,29 @@ sumstats[,5] = counts[,3]
    scale_fill_discrete(name = "Sports")
 p3
 
+# factorial ANOVA with interaction
+library(car)
+Anova(lm(d$psa ~ d$sports * d$female, type=c(2)))
+
+# significant interaction observed, so do simple effects to investigate further
+# grab the right data for females and males
+psaf <- d$psa[which(d$female == 1)]
+sportsf <- d$sports[which(d$female == 1)]
+
+psam <- d$psa[which(d$female == 0)]
+sportsm <- d$sports[which(d$female == 0)]
+
+# estimate the female model
+anova(lm(psaf ~ sportsf))
+
+# estimate the male model 
+anova(lm(psam ~ sportsm))
+
+#Pairwise comparisons
+pairwise.t.test(psaf, sportsf, p.adjust = c("bonf"))
+by(psaf, sportsf, mean)
+
+pairwise.t.test(psam, sportsm, p.adjust = c("bonf"))
+by(psam, sportsm, mean)
+
+######################
