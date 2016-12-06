@@ -39,6 +39,12 @@ library("ggplot2")
 library(tidyverse)
 d <- read.csv("~/walter/204_stats/tempmood.csv")
 
+# get group mean and sd for mood and temp
+mean(d$mood)
+sd(d$mood)
+mean(d$temp)
+sd(d$temp)
+
 # add obs var
 d = mutate(d,obs = 1:70)
 

@@ -6,15 +6,15 @@
 library(dplyr)
 library(tidyr)
 
-d <- read.csv("~/walter/204/confidence.csv")
+df <- read.csv("~/walter/204_stats/confidence.csv")
 
 # 1 format long
 
 # add subject variable
-mutate(d, Subject = 1:100)
+mutate(df, Subject = 1:100)
 
 # format long
-dlong<-reshape(d,                   #1. input wide data
+dlong<-reshape(df,                   #1. input wide data
               varying=c("t1","t2","t3"),  #2. specify time varying variables that will be collapsed into one variable
               v.names = "confidence",               #3. name of the new long variable
               timevar="obs",                   #4. name of the new time identifying variable
